@@ -1,0 +1,5 @@
+{
+  "name": "DaggerHeart Tracker",
+  "description": "A character tracking tool for Daggerheart RPG to manage HP, Stress, Hope, Armor, and Evasion.",
+  "requestFramePermissions": []
+}
