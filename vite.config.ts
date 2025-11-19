@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  // Base must match your GitHub repository name for Pages to work
-  base: '/tracker-daggerheart/', 
+  // Using './' makes it work on both Localhost and GitHub Pages without changing code
+  base: './', 
   plugins: [
     react(),
     VitePWA({
@@ -21,7 +21,7 @@ export default defineConfig({
         background_color: '#0f172a',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: './',
+        start_url: './index.html', // Relative path for start_url
         icons: [
           {
             src: 'pwa-192x192.png',
