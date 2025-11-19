@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Character, ViewState, DetailTab, Card, CardType, ClassData } from './types';
 import { PipTracker } from './components/PipTracker';
@@ -63,6 +62,7 @@ const DEFAULT_DOMAINS = [
 const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 9);
 
 export default function App() {
+  const [isLoaded, setIsLoaded] = useState(false); // Guard to prevent overwriting storage on init
   const [view, setView] = useState<ViewState>(ViewState.LIST);
   const [activeTab, setActiveTab] = useState<DetailTab>(DetailTab.STATS);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -138,14 +138,26 @@ export default function App() {
     // Custom Domains
     const storedDomains = localStorage.getItem(CUSTOM_DOMAINS_KEY);
     if (storedDomains) try { setCustomDomains(JSON.parse(storedDomains)); } catch(e) {}
-
+    
+    setIsLoaded(true); // Mark as loaded so we can start saving changes
   }, []);
 
-  // Save data
-  useEffect(() => localStorage.setItem(STORAGE_KEY, JSON.stringify(characters)), [characters]);
-  useEffect(() => localStorage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify(libraryCards)), [libraryCards]);
-  useEffect(() => localStorage.setItem(CUSTOM_CLASSES_KEY, JSON.stringify(customClasses)), [customClasses]);
-  useEffect(() => localStorage.setItem(CUSTOM_DOMAINS_KEY, JSON.stringify(customDomains)), [customDomains]);
+  // Save data - Only when isLoaded is true to prevent overwriting with empty array on startup
+  useEffect(() => {
+    if (isLoaded) localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+  }, [characters, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) localStorage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify(libraryCards));
+  }, [libraryCards, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) localStorage.setItem(CUSTOM_CLASSES_KEY, JSON.stringify(customClasses));
+  }, [customClasses, isLoaded]);
+  
+  useEffect(() => {
+    if (isLoaded) localStorage.setItem(CUSTOM_DOMAINS_KEY, JSON.stringify(customDomains));
+  }, [customDomains, isLoaded]);
 
   const handleCreate = () => {
     if (!newCharName.trim() || !newCharClass) return;
