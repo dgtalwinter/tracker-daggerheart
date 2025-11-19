@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  // 'base' is critical for GitHub Pages. './' makes it work in any subfolder.
-  base: './', 
+  // Base must match your GitHub repository name for Pages to work
+  base: '/tracker-daggerheart/', 
   plugins: [
     react(),
     VitePWA({
@@ -34,23 +34,6 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
-          }
-        ]
-      },
-      workbox: {
-        // This ensures all resources are cached for offline use
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'local-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              }
-            }
           }
         ]
       }
